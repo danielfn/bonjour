@@ -1,3 +1,10 @@
 FROM bucharestgold/centos7-s2i-nodejs:latest
-# The parent image uses ONBUILD to add package.json, run npm install and add bonjour.js
-# See https://github.com/ryanj/origin-s2i-nodejs/blob/master/nodejs.org/Dockerfile.onbuild#L65
+
+ONBUILD COPY package.json /opt/app-root/src
+ONBUILD COPY . /opt/app-root/src
+
+# Install the app
+ONBUILD RUN npm -s install
+
+# Run it
+CMD ["/bin/bash", "-c", "npm run -d $NPM_RUN" ]
